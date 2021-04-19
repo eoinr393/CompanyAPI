@@ -2,6 +2,9 @@
 
 namespace CompanyAPI.Models
 {
+    /// <summary>
+    /// Model used to represent a Company for Requests/Responses
+    /// </summary>
     public class CompanyModel
     {
         public int Id { get; set; }

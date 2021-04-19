@@ -24,7 +24,7 @@ namespace Company.DataAccess
             modelBuilder.Entity<Models.Ticker>().ToTable("ticker");
             modelBuilder.Entity<Models.CompanyExchange>().ToTable("company_exchange");
 
-            //Setup the many to many relationshing
+            //Setup the many to many relationship for company and exchange tables
             modelBuilder.Entity<Models.CompanyExchange>()
                 .HasKey(bc => new { bc.CompanyId, bc.ExchangeId });
             modelBuilder.Entity<Models.CompanyExchange>()

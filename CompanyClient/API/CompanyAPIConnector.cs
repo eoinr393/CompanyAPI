@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CompanyClient.API
 {
+    /// <summary>
+    /// API connector for the Company API
+    /// </summary>
     public class CompanyAPIConnector
     {
         private IHttpClientFactory httpClientFactory;
@@ -16,6 +19,10 @@ namespace CompanyClient.API
             this.httpClientFactory = httpClientFactory;
         }
 
+        /// <summary>
+        /// Gets all Companies
+        /// </summary>
+        /// <returns>A list of companies</returns>
         public async Task<List<CompanyModel>> GetAll()
         {
             try
@@ -34,12 +41,17 @@ namespace CompanyClient.API
             }
             catch (Exception e)
             {
-                //Logging tba
+                Console.WriteLine(e);
             }
 
             return new List<CompanyModel>();
         }
 
+        /// <summary>
+        /// Get a company by ISIN
+        /// </summary>
+        /// <param name="isin">the isin of the company</param>
+        /// <returns>the company</returns>
         public async Task<CompanyModel> GetCompany(string isin)
         {
             try
@@ -58,12 +70,17 @@ namespace CompanyClient.API
             }
             catch (Exception e)
             {
-                //Logging tba
+                Console.WriteLine(e);
             }
 
             return new CompanyModel();
         }
 
+        /// <summary>
+        /// Creates a company
+        /// </summary>
+        /// <param name="content">The httpcontent containing the company to be created</param>
+        /// <returns>Whether the company was created or not</returns>
         public async Task<bool> CreateCompany(HttpContent content)
         {
             try
@@ -76,12 +93,17 @@ namespace CompanyClient.API
             }
             catch (Exception e)
             {
-                //Logging tba
+                Console.WriteLine(e);
             }
 
             return false;
         }
 
+        /// <summary>
+        /// Updates a company
+        /// </summary>
+        /// <param name="content">The httpcontent containing the copmany to be updated</param>
+        /// <returns>whether the company was updated or not</returns>
         public async Task<bool> UpdateCompany(HttpContent content)
         {
             try
@@ -94,7 +116,7 @@ namespace CompanyClient.API
             }
             catch (Exception e)
             {
-                //Logging tba
+                Console.WriteLine(e);
             }
 
             return false;

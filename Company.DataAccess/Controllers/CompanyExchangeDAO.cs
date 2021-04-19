@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Company.DataAccess.Controllers
 {
+    /// <summary>
+    /// Database operations involving the company_exchange join table
+    /// </summary>
     public class CompanyExchangeDAO : ICompanyExchangeDAO
     {
         private readonly CompanyDBContext dbContext;
@@ -15,6 +18,11 @@ namespace Company.DataAccess.Controllers
             this.dbContext = context;
         }
 
+        /// <summary>
+        /// Creates a new entry in the company_exchange table
+        /// </summary>
+        /// <param name="companyExchange">the to-be-created company</param>
+        /// <returns>the created object</returns>
         public async Task<CompanyExchange> CreateCompanyExchange(CompanyExchange companyExchange)
         {
             await dbContext.CompanyExchange.AddAsync(companyExchange);
@@ -22,11 +30,22 @@ namespace Company.DataAccess.Controllers
             return companyExchange; 
         }
 
+        /// <summary>
+        /// Gets a list of companyExchanges by their CompanyId
+        /// </summary>
+        /// <param name="id">the companyId</param>
+        /// <returns>a list of companyExchanges </returns>
         public async Task<List<CompanyExchange>> GetCompanyExchangesByCompanyId(int id)
         {
             return await dbContext.CompanyExchange.Where(c => c.CompanyId == id).ToListAsync();
         }
 
+        /// <summary>
+        /// Updates the ExchangeIDs of a given CopmanyID
+        /// </summary>
+        /// <param name="companyId">the CompanyId</param>
+        /// <param name="exchangeIds">the new exchange Id's that should be related to the companyId</param>
+        /// <returns>The updated list of company exchanges</returns>
         public async Task<List<CompanyExchange>> UpdateCompanyExchanges(int companyId, List<int> exchangeIds)
         {
             //Get current existing

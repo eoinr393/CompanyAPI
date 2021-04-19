@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace Company.DataAccess
 {
+    /// <summary>
+    /// Initialses the Database with seed data
+    /// </summary>
     public static class CompanyDBInitializer
-    {
-        /// <summary>
-        /// Initialses the Database with seed data
-        /// </summary>
-        /// <param name="context"></param>
+    {        
         public static void Initialize(CompanyDBContext context)
         {
             context.Database.EnsureCreated();

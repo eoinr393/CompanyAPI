@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Company.DataAccess.Test
 {
+    /// <summary>
+    /// Tests relating to CompanyExchangeDAO
+    /// </summary>
     [TestFixture]
     public class CompanyExchangeDAOTest
     {

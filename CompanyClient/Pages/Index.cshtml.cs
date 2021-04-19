@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace CompanyClient.Pages
 {
+    /// <summary>
+    /// Main Page to view and manipulate Companies
+    /// </summary>
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -29,11 +32,20 @@ namespace CompanyClient.Pages
             this.api = new CompanyAPIConnector(factory);
         }
 
+        /// <summary>
+        /// Load all compnies into the model
+        /// </summary>
         public void OnGet()
         {
             var result = this.api.GetAll();
             this.CompanyModels = result.Result;
         }
+
+        /// <summary>
+        /// Gets a single company by its isin and returns it as JSON
+        /// </summary>
+        /// <param name="isin">the isin of the company</param>
+        /// <returns>copmanyModel object as json</returns>
         public JsonResult OnGetCompany(string isin)
         {
             var result = this.api.GetCompany(isin);
@@ -52,8 +64,14 @@ namespace CompanyClient.Pages
             return new JsonResult(JsonConvert.SerializeObject(viewModel));
         }
 
+        // Model that gets loaded with the created company 
         [BindProperty]
         public Models.CompanyModel CreatedCompanyModel { get; set; }
+
+        /// <summary>
+        /// Creates a company
+        /// </summary>
+        /// <returns>Refreshes page</returns>
         public async Task<ActionResult> OnPostCreate()
         {
             if (!ModelState.IsValid)
@@ -76,8 +94,13 @@ namespace CompanyClient.Pages
             return RedirectToPage("Index");
         }
 
+        // Model that gets loaded with the company to be updated
         [BindProperty]
         public Models.CompanyModel UpdatedCompanyModel { get; set; }
+        /// <summary>
+        /// Updates a company Model
+        /// </summary>
+        /// <returns>Refreshes page</returns>
         public async Task<ActionResult> OnPostUpdate()
         {
             if (!ModelState.IsValid)

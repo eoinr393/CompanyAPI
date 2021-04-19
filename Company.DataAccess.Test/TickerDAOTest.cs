@@ -1,7 +1,6 @@
 ﻿using Company.DataAccess.Controllers;
 using Company.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Company.DataAccess.Test
 {
+    /// <summary>
+    /// Tests relating to TickerDAO
+    /// </summary>
     [TestFixture]
     public class TickerDAOTest
     {
@@ -17,10 +19,12 @@ namespace Company.DataAccess.Test
 
         private DbContextOptions<CompanyDBContext> options = new DbContextOptionsBuilder<CompanyDBContext>().UseInMemoryDatabase(databaseName: "TickerDatabase").Options;
 
+
         [SetUp]
         public void SetUp()
         {
-            using(var context = new CompanyDBContext(options))
+            // Insert seed data into the database using one instance of the context
+            using (var context = new CompanyDBContext(options))
             {
                 context.Database.EnsureDeleted();
 

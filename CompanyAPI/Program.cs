@@ -13,6 +13,7 @@ namespace CompanyAPI
         {
             var host = CreateHostBuilder(args).Build();
 
+            //Create the DB tables if they dont exist
             CreateDbIfNotExists(host);
 
             host.Run();

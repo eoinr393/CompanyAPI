@@ -32,12 +32,18 @@ namespace CompanyAPI.Controllers
         /// Update a Company Object
         /// </summary>
         /// <param name="companyUpdate"></param>
-        /// <returns></returns>
+        /// <returns>The Updated company</returns>
         [HttpPut()]
         public async Task<IActionResult> Update(CompanyModel companyUpdate)
         {
             if (companyUpdate == null)
                 return BadRequest("Company not recieved");
+
+            var existingCompany = await companyDAO.GetCompanyById(companyUpdate.Id);
+
+            if (existingCompany.ISIN != companyUpdate.ISIN && !this.ValidateISIN(companyUpdate.ISIN))          
+                return BadRequest("ISIN value must begin with two letters and be unique");
+           
 
             //Update Company
             var updatedCompany = await companyDAO.UpdateCompany(new Company.DataAccess.Models.Company
@@ -85,8 +91,12 @@ namespace CompanyAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            //Get all company info
             var allCompanies = await companyDAO.GetCompanys();
+
+            //Load up Ticker and Exchange data
             List<CompanyModel> companyInfo = new List<CompanyModel>();
+
             foreach (Company.DataAccess.Models.Company c in allCompanies)
             {
 
@@ -112,8 +122,8 @@ namespace CompanyAPI.Controllers
         /// <summary>
         /// Get a company by either ID or by ISIN
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">the ID or the ISIN to be for searching the DB</param>
+        /// <returns>The company object</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByID(string id)
         {
@@ -142,21 +152,15 @@ namespace CompanyAPI.Controllers
         /// <summary>
         /// Create a new Company
         /// </summary>
-        /// <param name="company"></param>
+        /// <param name="company">The company to create</param>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Create(CompanyModel company)
         {
-            if (!Regex.Match(company.ISIN, "^[a-zA-Z][a-zA-Z]").Success)
-            {
-                return BadRequest("ISIN value must begin with two letters");
-            }
-
-            if (await companyDAO.GetCompanyByISIN(company.ISIN) != null)
-            {
-                return BadRequest($"ISIN: {company.ISIN} already exists");
-            }
-
+            if (!this.ValidateISIN(company.ISIN))
+                return BadRequest("ISIN value must begin with two letters and be unique");
+           
+            //Create Company
             var newCompany = await companyDAO.CreateCompany(new Company.DataAccess.Models.Company
             {
                 Name = company.Name,
@@ -164,11 +168,13 @@ namespace CompanyAPI.Controllers
                 Website = company.Website
             });
 
+            //Create Tickers
             foreach (var ticker in company.Ticker)
             {
                 await tickerDAO.CreateTicker(new Company.DataAccess.Models.Ticker { CompanyId = newCompany.Id, Name = ticker });
             }
 
+            //Create Exchanges and link to Copmany in join table
             var exchanges = new List<Company.DataAccess.Models.Exchange>();
 
             foreach (var exchange in company.CompanyExchange)
@@ -181,6 +187,23 @@ namespace CompanyAPI.Controllers
             var companyInfo = CompanyMapper.DAOToAPIModel(newCompany, exchanges, newCompany.Ticker.ToList());
 
             return Ok(companyInfo);
+        }
+
+        /// <summary>
+        /// Validates the ISIN
+        /// </summary>
+        /// <param name="isin">the ISIN to validate</param>
+        /// <returns>Whether the isin is valid</returns>
+        private bool ValidateISIN(string isin)
+        {
+            bool passedValidation = true;
+
+            if (!Regex.Match(isin, "^[a-zA-Z][a-zA-Z]").Success || companyDAO.GetCompanyByISIN(isin).Result != null)
+            {
+                return false;
+            }
+
+            return passedValidation;
         }
     }
 }

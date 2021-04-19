@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Company.DataAccess.Test
 {
+    /// <summary>
+    /// Tests relating to Company DAO
+    /// </summary>
     [TestFixture]
     public class CompanyDAOTest
     {

@@ -8,6 +8,13 @@ namespace CompanyAPI.Models
     /// </summary>
     public class CompanyMapper
     {
+        /// <summary>
+        /// Creates a CompanyModel object from given DAO models
+        /// </summary>
+        /// <param name="company">the company model</param>
+        /// <param name="exchanges">list of exchanges</param>
+        /// <param name="tickers">list of tickers</param>
+        /// <returns></returns>
         public static CompanyModel DAOToAPIModel(Company.DataAccess.Models.Company company,
             List<Company.DataAccess.Models.Exchange> exchanges =null,
             List<Company.DataAccess.Models.Ticker> tickers = null)

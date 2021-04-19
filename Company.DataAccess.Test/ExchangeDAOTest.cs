@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Company.DataAccess.Test
 {
+    /// <summary>
+    /// Tests relating to ExchangeDAO
+    /// </summary>
     [TestFixture]
     public class ExchangeDAOTest
     {
