@@ -1,0 +1,84 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<head>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+
+<div class="text-center">
+    <div style="height:300px; width:50%; margin:auto;float:left;border:thin;overflow:auto;">
+        <h5>Overview</h5>
+        <table id="allCompaniesTable" style="border:1px solid #ddd !important;padding:2px;margin:4px;width:95%">
+            <thead style="background-color:lightcyan">
+                <tr>
+                    <td>Name</td>
+                    <td>ISIN</td>
+                    <td>Website</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Models.CompanyModel model in Model.CompanyModels)
+                {
+                    <tr style="">
+                        <td>@Html.DisplayFor(modelItem => model.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => model.ISIN)</td>
+                        <td>@Html.DisplayFor(modelItem => model.Website)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <form method="post" asp-action="update">
+        <div style="height:300px; width:50%;float:left;margin:auto">
+            <h5>Loaded</h5>
+            <div style="padding:3px;text-align:left;margin-left:20%">
+                <input asp-for="@Model.UpdatedCompanyModel.Id" id="loadedId" style="visibility:hidden;" />
+                <div style="padding:3px">
+                    Name:     <input asp-for="@Model.UpdatedCompanyModel.Name" id="loadedName" />
+                </div>
+                <div style="padding:3px">
+                    ISIN:     <input asp-for="@Model.UpdatedCompanyModel.ISIN" id="loadedISIN" />
+                </div>
+                <div style="padding:3px">
+                    Website:  <input asp-for="@Model.UpdatedCompanyModel.Website" id="loadedWebsite" />
+                </div><br />
+            </div>
+            <div>
+                Tickers:
+                <input asp-for="@Model.UpdatedCompanyModel.Ticker[0]" id="loadedTickers" style="height:6em;width:20%" />
+                Exchanges
+                <input asp-for="@Model.UpdatedCompanyModel.CompanyExchange[0]" id="loadedExchanges" style="height:6em;width:20%" />
+                <button asp-page-handler="Update">Update</button>
+            </div>
+        </div>
+    </form>
+    <form method="post">
+        <div style="text-align:left">
+            <h5>Create New Company</h5>
+            <div style="padding:3px;width:20%;float:left">
+                <div style="padding:3px">
+                    Name:     <input asp-for="@Model.CreatedCompanyModel.Name"/>
+                </div>
+                <div style="padding:3px">
+                    ISIN:     <input asp-for="@Model.CreatedCompanyModel.ISIN"/>
+                </div>
+                <div style="padding:3px">
+                    Website:  <input asp-for="@Model.CreatedCompanyModel.Website" />
+                </div>
+            </div>
+            <div style="width: 20%; float: left">
+                Tickers:
+                <input asp-for="@Model.CreatedCompanyModel.Ticker[0]" style="height:6em;" />
+            </div>
+            <div style="width: 20%; float: left">
+                Exchanges
+                <input asp-for="@Model.CreatedCompanyModel.CompanyExchange[0]" style="height:6em;" />
+            </div>
+            <br />
+            <button asp-page-handler="Create" style="float:left">Create</button>
+        </div>
+    </form>    
+</div>
